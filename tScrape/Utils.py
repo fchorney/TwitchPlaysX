@@ -36,8 +36,13 @@ def read_config(config_path):
 
 def pERR(msg):
     from sys import stderr
-        print >> stderr, msg
+    print >> stderr, "Error: %s" % msg
 
 def pOUT(msg):
     from sys import stdout
-        print >> stdout, msg
+    print >> stdout, msg
+
+def exit(rc=0):
+    from sys import exit as sys_exit
+    pOUT("Exiting with status code %s" % rc)
+    sys_exit(rc)

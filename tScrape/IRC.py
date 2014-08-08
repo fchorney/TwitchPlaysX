@@ -1,7 +1,9 @@
 import socket
 import re
 
-from sys import exit
+from Utils import pOUT
+from Utils import pERR
+from Utils import exit
 
 class IRC:
     """
