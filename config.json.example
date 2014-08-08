@@ -1,0 +1,12 @@
+{
+    "irc": {
+        "server": "irc.twitch.tv",
+        "port": 6667,
+        "channel": "username",
+        "username": "username",
+        "password": "oauth: (http://twitchapps.com/tmi/)",
+        "retry_count": 5,
+        "timeout": 10,
+        "recv_amount": 1024
+    }
+}

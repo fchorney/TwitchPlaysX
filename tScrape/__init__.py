@@ -1,0 +1,1 @@
+from IRC import IRC
