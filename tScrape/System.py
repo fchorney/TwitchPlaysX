@@ -20,11 +20,9 @@ class System:
             import win32con
         elif _platform in ['darwin']:
             self.platform = System.OSX
-            from os import system
         else:
             pERR('Platform %s not supported' % _platform)
-            self.platform = System.OSX
-            #exit(1)
+            exit(1)
 
         # Initialize Keycodes
         self.keycodes = {}
@@ -32,8 +30,9 @@ class System:
 
     def send_key(self, key_cmd):
         if self.platform == System.OSX:
+            from os import system
             # Use osascript to send key events
-            cmd_str = """osascript -e 'tell application "System Events" to key down (key code %i)'""" % key_cmd
+            cmd_str = """osascript -e 'tell application "System Events" to key code %i'""" % key_cmd
             system(cmd_str)
         elif self.platform == System.WIN:
             # Key Down
@@ -47,13 +46,11 @@ class System:
 
     def process_token(self, token):
         tkn = token.strip().lower()
-        print "Token: %s" % tkn
-        print "Keys: %s" % self.keycodes
         if tkn not in self.keycodes:
             pERR("Unknown Token: %s" % tkn)
             return
         pOUT('Sending command: %s' % tkn)
-        #self.send_key(self.keycodes[tkn])
+        self.send_key(self.keycodes[tkn])
 
 
 class Nintendo(System):
