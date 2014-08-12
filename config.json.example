@@ -8,5 +8,17 @@
         "retry_count": 5,
         "timeout": 10,
         "recv_amount": 1024
+    },
+    "buttons": {
+        "A": "A",
+        "B": "B",
+
+        "UP": "Up",
+        "DOWN": "Down",
+        "LEFT": "Left",
+        "RIGHT": "Right",
+
+        "START": "Enter",
+        "SELECT": "Spacebar"
     }
 }
