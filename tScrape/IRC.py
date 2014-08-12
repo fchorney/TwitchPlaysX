@@ -13,14 +13,14 @@ class IRC:
 
     def __init__(self, config, system):
         # Set local config variables
-        self.host = config.irc.server
-        self.port = config.irc.port
-        self.channel = "#%s" % config.irc.channel
-        self.username = config.irc.username
-        self.password = config.irc.password
-        self.retry_count = config.irc.retry_count
-        self.timeout = config.irc.timeout
-        self.recv_amount = config.irc.recv_amount
+        self.host = config.server
+        self.port = config.port
+        self.channel = "#%s" % config.channel
+        self.username = config.username
+        self.password = config.password
+        self.retry_count = config.retry_count
+        self.timeout = config.timeout
+        self.recv_amount = config.recv_amount
 
         # Keep a reference to the system object
         self.system = system

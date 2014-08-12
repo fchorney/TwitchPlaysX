@@ -25,6 +25,11 @@ def read_config(config_path):
                         a,
                         Config(b) if isinstance(b, dict) else b
                     )
+
+        def __getitem__(self, val):
+            return self.__dict__[val]
+
+
         def __repr__(self):
             return '<%s>' % str(
                 '\n '.join(
