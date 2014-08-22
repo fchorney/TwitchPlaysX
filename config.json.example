@@ -7,7 +7,8 @@
         "password": "oauth: (http://twitchapps.com/tmi/)",
         "retry_count": 5,
         "timeout": 10,
-        "recv_amount": 1024
+        "recv_amount": 1024,
+        "multi_press": false
     },
     "buttons": {
         "A": "A",
@@ -20,5 +21,8 @@
 
         "START": "Enter",
         "SELECT": "Spacebar"
+    },
+    "misc": {
+        "debug": false
     }
 }

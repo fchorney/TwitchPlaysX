@@ -15,10 +15,14 @@ def main():
     args = parse_args()
     # Read in config file
     config = read_config(args.config)
+    # Debug Mode Test
+    debug = False
+    if config.misc.debug:
+        debug = True
     # Initialize System
-    system = System(config.buttons)
+    system = System(config.buttons, debug=debug)
     # Initialize and connect to IRC
-    irc = IRC(config.irc, system)
+    irc = IRC(config.irc, system, debug=debug)
 
     # Sleep for 5 seconds to allow the user to put the emulator in the
     # foreground

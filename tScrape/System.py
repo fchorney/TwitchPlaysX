@@ -14,8 +14,11 @@ class System:
     WIN     = 2
 
 
-    def __init__(self, config):
+    def __init__(self, config, debug=False):
         from sys import platform as _platform
+
+        # Set Debug Mode
+        self.debug = debug
 
         # Set Locals
         self.config = config
@@ -31,40 +34,64 @@ class System:
             self.keycodes = OSX_KEYCODES
         else:
             pERR('Platform %s not supported' % _platform)
-            self.keycodes = OSX_KEYCODES
-            self.platform = System.OSX
-            #exit(1)
+
+            if self.debug:
+                self.keycodes = OSX_KEYCODES
+                self.platform = System.OSX
+            else:
+                exit(1)
 
 
-    def send_key(self, key_cmd):
+    def send_key(self, key_cmds):
+
         if self.platform == System.OSX:
             from os import system
 
-            # Use osascript to send key events
-            cmd_str = """osascript -e 'tell application "System Events" to key code %i'""" % key_cmd
-            print cmd_str
-            #system(cmd_str)
+            for raw_key_cmd in key_cmds:
+                key_cmd = self.keycodes[raw_key_cmd]
+                # Use osascript to send key events
+                cmd_str = """osascript -e 'tell application "System Events" to key code %i'""" % key_cmd
+
+                if self.debug:
+                    print "Command String (OSX): %s" % cmd_str
+                else:
+                    system(cmd_str)
+
         elif self.platform == System.WIN:
             from win32api import keybd_event
             from win32api import MapVirtualKey
             from win32api import KEYEVENTF_KEYUP
 
-            # Key Down, wait, Key Up
-            keybd_event(0, MapVirtualKey(key_cmd, 0), 0, 0)
-            sleep(0.1)
-            keybd_event(0, MapVirtualKey(key_cmd, 0), KEYEVENTF_KEYUP, 0)
+            for raw_key_cmd in key_cmds:
+                key_cmd = self.keycodes[raw_key_cmd]
+
+                if self.debug:
+                    print "Command String (WIN): %s" % key_cmd
+                else:
+                    # Key Down, wait, Key Up
+                    keybd_event(0, MapVirtualKey(key_cmd, 0), 0, 0)
+                    sleep(0.1)
+                    keybd_event(0, MapVirtualKey(key_cmd, 0), KEYEVENTF_KEYUP, 0)
 
 
-    def process_token(self, token):
-        try:
-            tkn = self.config[token.strip().upper()]
-        except Exception:
-            pERR("Unknown Token: %s" % token)
-            return
+    def process_tokens(self, tokens):
+        tkns = []
+        for token in tokens:
+            try:
+                tkn = self.config[token.strip().upper()]
+            except Exception as e:
+                pERR(
+                    "Unknown Token [%s] in Token String %s: %s" % (
+                        token, tokens, e
+                    )
+                )
+                return
 
-        if tkn not in self.keycodes:
-            pERR("Unknown Tkn: %s" % tkn)
-            return
+            if tkn not in self.keycodes:
+                pERR("Unknown Tkn: %s" % tkn)
+                return
 
-        pOUT('Sending command: %s' % tkn)
-        self.send_key(self.keycodes[tkn])
+            tkns.append(self.config[token.strip().upper()])
+
+        pOUT('Sending commands: %s' % tkns)
+        self.send_key(tkns)

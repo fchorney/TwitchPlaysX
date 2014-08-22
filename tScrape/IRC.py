@@ -11,7 +11,10 @@ class IRC:
     of https://github.com/iCart/TwitchPlaysStreetFighter
     """
 
-    def __init__(self, config, system):
+    def __init__(self, config, system, debug=False):
+        # Set Debug Mode
+        self.debug = debug
+
         # Set local config variables
         self.host = config.server
         self.port = config.port
@@ -21,6 +24,8 @@ class IRC:
         self.retry_count = config.retry_count
         self.timeout = config.timeout
         self.recv_amount = config.recv_amount
+        self.multi_press = config.multi_press
+        self.multi_separator = config.multi_separator
 
         # Keep a reference to the system object
         self.system = system
@@ -185,7 +190,11 @@ class IRC:
         if token is None or token.strip() == '':
             return
         pOUT("TOKEN: {%s, %s}" % (user, token))
-        self.system.process_token(token)
+        if self.multi_press:
+            tokens = token.split(self.multi_separator)
+        else:
+            tokens = [token]
+        self.system.process_tokens(tokens)
 
 
     def successful_login(self):
